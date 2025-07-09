@@ -8,8 +8,8 @@ export const NewTask = ({
 	const inputRef = useRef<HTMLInputElement>(null);
 	return (
 		<form
-			action={(event) => {
-				onAddTask(event);
+			action={(formData) => {
+				onAddTask(formData);
 				if (!inputRef.current) return;
 				inputRef.current.value = ""; // Clear the input after submission
 			}}
