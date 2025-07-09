@@ -3,12 +3,17 @@
 import { fetchRSC, hydrate } from "@parcel/rsc/client";
 import type { ReactNode } from "react";
 
+const getDelay = () => {
+  const timePreference = localStorage.getItem("rsc-wait");
+  return timePreference ? parseInt(timePreference, 10) : 250;
+};
+
 const updateRoot = hydrate({
   // Setup a callback to perform server actions.
   // This sends a POST request to the server, and updates the page with the response.
   async callServer(id, args) {
     const { result, root } = await fetchRSC<{ root: ReactNode; result: any }>(
-      location.pathname,
+      `${location.pathname}?delay=${getDelay()}`,
       {
         method: "POST",
         headers: {
@@ -30,8 +35,10 @@ const updateRoot = hydrate({
 // and in a React transition, stream in the new page. Once complete, we'll pushState to
 // update the URL in the browser.
 async function navigate(pathname: string, push = false) {
-  const root = await fetchRSC<ReactNode>(pathname);
-  return new Promise<void>((resolve) => {
+  const root = await fetchRSC<ReactNode>(
+    `${pathname}?delay=${getDelay()}`
+  );
+  return new Promise<void>(async (resolve) => {
     updateRoot(root, () => {
       if (push) {
         history.pushState(null, "", pathname);

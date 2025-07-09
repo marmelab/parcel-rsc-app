@@ -1,6 +1,7 @@
 import { Header } from "./Header";
 import "./page.css";
 import "./client";
+import { DelayConfigurator } from "./DelayConfigurator";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -17,6 +18,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           <Header />
           <main className="p-3 flex flex-col gap-6">{children}</main>
         </div>
+        <DelayConfigurator />
       </body>
     </html>
   );

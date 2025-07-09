@@ -1,29 +1,39 @@
 import { callAction, renderRequest } from "@parcel/rsc/node";
-import express from "express";
-
+import express, { type RequestHandler } from "express";
+import { AboutPage } from "./AboutPage";
 // Page components. These must have "use server-entry" so they are treated as code splitting entry points.
 import { TasksPage } from "./TasksPage";
-import { AboutPage } from "./AboutPage";
+
+const addDelay: RequestHandler = (req, _res, next) => {
+  const delay = req.query.delay;
+  if (delay && !isNaN(Number(delay))) {
+    const time = Number(delay);
+    setTimeout(() => next(), time);
+  } else {
+    next();
+  }
+};
 
 const app = express();
 
 app.use(express.static("dist"));
 
-app.get("/about", async (req, res) => {
+app.get("/about", addDelay, async (req, res) => {
   await renderRequest(req, res, <AboutPage />, { component: AboutPage });
 });
 
-app.get("{/:filter}", async (req, res) => {
+app.get("{/:filter}", addDelay, async (req, res) => {
   const filter = getFilter(req.params.filter as string | undefined);
   if (filter !== undefined && filter !== "active" && filter !== "completed") {
     res.status(404).send("Not found");
     return;
   }
-  await renderRequest(req, res, <TasksPage filter={filter} />, { component: TasksPage });
+  await renderRequest(req, res, <TasksPage filter={filter} />, {
+    component: TasksPage,
+  });
 });
 
-
-app.post("{/:filter}", async (req, res) => {
+app.post("{/:filter}", addDelay, async (req, res) => {
   const filter = getFilter(req.params.filter as string | undefined);
   const id = req.get("rsc-action-id");
   const { result } = await callAction(req, id);
@@ -42,4 +52,4 @@ const getFilter = (filter: string | undefined) => {
     return filter;
   }
   return undefined;
-}
+};
