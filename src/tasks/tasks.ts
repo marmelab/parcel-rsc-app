@@ -1,10 +1,7 @@
 "use server";
 import { db } from "../db";
 
-const wait = (ms = 2000) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export const getTasks = async (filter?: string) => {
-  await wait();
   const query = db
     .from("tasks")
     .select("*")
@@ -32,7 +29,6 @@ export const getTasks = async (filter?: string) => {
 };
 
 export const addTask = async (formData: FormData) => {
-  await wait();
   const description = formData.get("description");
   if (!description || typeof description !== "string") {
     throw new Error("Invalid task description");
@@ -46,7 +42,6 @@ export const addTask = async (formData: FormData) => {
 };
 
 export const completeTask = async (formData: FormData) => {
-  await wait();
   const id = formData.get("id");
   if (!id || typeof id !== "string") {
     throw new Error("Invalid task ID");
@@ -62,8 +57,18 @@ export const completeTask = async (formData: FormData) => {
   }
 };
 
+export const completeAllCompleted = async () => {
+  const { data, error } = await db
+    .from("tasks")
+    .update({ completed_at: new Date().toISOString() })
+    .is("completed_at", null);
+
+  if (error) {
+    throw new Error(`Error completing task: ${error.message}`);
+  }
+};
+
 export const undoTask = async (formData: FormData) => {
-  await wait();
   const id = formData.get("id");
   if (!id || typeof id !== "string") {
     throw new Error("Invalid task ID");
@@ -80,7 +85,6 @@ export const undoTask = async (formData: FormData) => {
 };
 
 export const clearCompleted = async () => {
-  await wait();
   const { data, error } = await db
     .from("tasks")
     .delete()
@@ -92,7 +96,6 @@ export const clearCompleted = async () => {
 };
 
 export const updateTask = async (formData: FormData) => {
-  await wait();
   const id = formData.get("id");
   if (!id || typeof id !== "string") {
     throw new Error("Invalid task ID");
