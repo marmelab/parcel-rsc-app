@@ -81,12 +81,12 @@ export const TaskItem = ({
 					<>
 						<div>{optimisticTask.description}</div>
 						<div className="text-xs uppercase font-semibold flex justify-between">
-							<span className="opacity-60">
+							<span className="opacity-80">
 								{formatter.format(new Date(optimisticTask.created_at))}
 							</span>
 							{optimisticTask.completed_at ? (
 								<span className="flex gap-1">
-									<span className="opacity-60">Completed on</span>
+									<span className="opacity-80">Completed on</span>
 									<span className="text-accent">
 										{formatter.format(new Date(optimisticTask.completed_at))}
 									</span>

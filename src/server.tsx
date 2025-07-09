@@ -1,4 +1,5 @@
 import { callAction, renderRequest } from "@parcel/rsc/node";
+import compression from "compression";
 import express, { type RequestHandler } from "express";
 // Page components. These must have "use server-entry" so they are treated as code splitting entry points.
 import { AboutPage } from "./pages/about/AboutPage";
@@ -16,6 +17,7 @@ const addDelay: RequestHandler = (req, _res, next) => {
 
 const app = express();
 
+app.use(compression());
 app.use(express.static("dist"));
 
 app.get("/about", addDelay, async (req, res) => {

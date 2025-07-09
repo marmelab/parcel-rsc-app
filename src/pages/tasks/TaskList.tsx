@@ -61,7 +61,7 @@ export const TaskList = ({
 			)}
 			<div className="flex flex-col gap-6">
 				<div className="flex justify-between items-center">
-					<div className="text-sm opacity-60">
+					<div className="text-sm opacity-80">
 						{optimisticData.totalActiveTasks}{" "}
 						{`task${optimisticData.totalActiveTasks === 1 ? "" : "s"}`} left
 					</div>
