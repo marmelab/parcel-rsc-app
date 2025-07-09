@@ -1,5 +1,5 @@
 "use server";
-import { db } from "../db";
+import { db } from "../../db";
 
 export const getTasks = async (filter?: string) => {
   const query = db

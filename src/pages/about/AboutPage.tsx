@@ -1,5 +1,5 @@
 "use server-entry";
-import { Layout } from "./layout/Layout";
+import { Layout } from "../../layout/Layout";
 
 export async function AboutPage() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 import { useOptimistic, useTransition } from "react";
 import { v7 as generateUuid } from "uuid";
-import type { Task } from "../types";
+import type { Task } from "../../types";
 import { ClearCompletedTasksButton } from "./ClearCompletedTasksButton";
 import { CompleteAllTasksButton } from "./CompleteAllTasksButton";
 import { NewTask } from "./NewTask";

@@ -1,8 +1,8 @@
 import { callAction, renderRequest } from "@parcel/rsc/node";
 import express, { type RequestHandler } from "express";
-import { AboutPage } from "./AboutPage";
 // Page components. These must have "use server-entry" so they are treated as code splitting entry points.
-import { TasksPage } from "./TasksPage";
+import { AboutPage } from "./pages/about/AboutPage";
+import { TasksPage } from "./pages/tasks/TasksPage";
 
 const addDelay: RequestHandler = (req, _res, next) => {
   const delay = req.query.delay;
