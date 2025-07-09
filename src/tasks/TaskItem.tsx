@@ -2,7 +2,7 @@
 import { useEffect, useOptimistic, useState, useTransition } from "react";
 import { undoTask, completeTask, updateTask } from "./tasks";
 import { CircleCheckIcon, CircleIcon } from "./icons";
-import type { Task } from "./types";
+import type { Task } from "../types";
 
 export const TaskItem = ({
   task,

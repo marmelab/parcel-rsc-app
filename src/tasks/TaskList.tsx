@@ -5,7 +5,7 @@ import { ClearCompletedTasksButton } from "./ClearCompletedTasksButton";
 import { NewTask } from "./NewTask";
 import { TaskFilters } from "./TaskFilters";
 import { TaskItem } from "./TaskItem";
-import type { Task } from "./types";
+import type { Task } from "../types";
 import { addTask } from "./tasks";
 
 export const TaskList = ({
