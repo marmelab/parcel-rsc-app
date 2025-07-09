@@ -10,7 +10,7 @@ export const DelayConfigurator = () => {
 	});
 
 	return (
-		<div className="w-full mx-auto mt-auto mb-6 max-w-md">
+		<div className="w-full mx-auto mt-auto p-3 mb-3 max-w-md">
 			<label className="fieldset w-full">
 				<span className="fieldset-legend">RSC Delay in MS</span>
 				<input
