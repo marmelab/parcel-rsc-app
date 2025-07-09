@@ -18,7 +18,7 @@ export const TaskList = ({
 	tasks: Task[];
 	totalActiveTasks: number;
 }) => {
-	const [isPendingNewTask, startTransitionNewTask] = useTransition();
+	const [, startTransitionNewTask] = useTransition();
 
 	const [optimisticData, setOptimisticTask] = useOptimistic<
 		{ tasks: Task[]; totalActiveTasks: number },
