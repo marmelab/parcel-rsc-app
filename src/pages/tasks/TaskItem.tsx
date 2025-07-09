@@ -52,6 +52,7 @@ export const TaskItem = ({
 					</button>
 				</div>
 			</form>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: there is an Edit button too */}
 			<div onDoubleClick={() => setIsEditing(true)}>
 				{isEditing ? (
 					<form

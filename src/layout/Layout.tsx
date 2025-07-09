@@ -4,22 +4,22 @@ import "./client";
 import { DelayConfigurator } from "./DelayConfigurator";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <html
-      lang="en"
-      className="min-h-screen flex flex-col scrollbar-stable scrollbar-both-edges"
-      data-theme="dim"
-    >
-      <head>
-        <title>Parcel React Server App</title>
-      </head>
-      <body className="min-h-screen flex flex-col scrollbar-stable scrollbar-both-edges">
-        <div className="container mx-auto w-full max-w-3xl flex flex-col">
-          <Header />
-          <main className="p-3 flex flex-col gap-6">{children}</main>
-        </div>
-        <DelayConfigurator />
-      </body>
-    </html>
-  );
+	return (
+		<html
+			lang="en"
+			className="min-h-screen flex flex-col scrollbar-stable scrollbar-both-edges"
+			data-theme="dim"
+		>
+			<head>
+				<title>Parcel React Server App</title>
+			</head>
+			<body className="min-h-screen flex flex-col scrollbar-stable scrollbar-both-edges">
+				<div className="container mx-auto w-full max-w-3xl flex flex-col">
+					<Header />
+					<main className="p-3 flex flex-col gap-6">{children}</main>
+				</div>
+				<DelayConfigurator />
+			</body>
+		</html>
+	);
 };

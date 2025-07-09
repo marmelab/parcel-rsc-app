@@ -1,4 +1,5 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-    themes: dim;
+	/* biome-ignore lint/correctness/noUnknownProperty: DaisyUI config */
+	themes: dim;
 }

@@ -39,41 +39,41 @@ export const TaskList = ({
 	};
 
 	return (
-    <>
-      <NewTask onAddTask={handleAddTask} />
+		<>
+			<NewTask onAddTask={handleAddTask} />
 
-      {optimisticData.tasks.length === 0 ? (
-        <div className="alert">
-          <div>
-            <span>No tasks</span>
-          </div>
-        </div>
-      ) : (
-        <ul className="list bg-base-300 rounded-box shadow-md">
-          {optimisticData.tasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              isOptimistic={!tasks.some((t) => t.id === task.id)}
-            />
-          ))}
-        </ul>
-      )}
-      <div className="flex flex-col gap-6">
-        <div className="flex justify-between items-center">
-          <div className="text-sm opacity-60">
-            {optimisticData.totalActiveTasks}{" "}
-            {`task${optimisticData.totalActiveTasks === 1 ? "" : "s"}`} left
-          </div>
-          <div className="flex gap-6">
-            <CompleteAllTasksButton />
-            <ClearCompletedTasksButton />
-          </div>
-        </div>
-        <TaskFilters filter={filter} />
-      </div>
-    </>
-  );
+			{optimisticData.tasks.length === 0 ? (
+				<div className="alert">
+					<div>
+						<span>No tasks</span>
+					</div>
+				</div>
+			) : (
+				<ul className="list bg-base-300 rounded-box shadow-md">
+					{optimisticData.tasks.map((task) => (
+						<TaskItem
+							key={task.id}
+							task={task}
+							isOptimistic={!tasks.some((t) => t.id === task.id)}
+						/>
+					))}
+				</ul>
+			)}
+			<div className="flex flex-col gap-6">
+				<div className="flex justify-between items-center">
+					<div className="text-sm opacity-60">
+						{optimisticData.totalActiveTasks}{" "}
+						{`task${optimisticData.totalActiveTasks === 1 ? "" : "s"}`} left
+					</div>
+					<div className="flex gap-6">
+						<CompleteAllTasksButton />
+						<ClearCompletedTasksButton />
+					</div>
+				</div>
+				<TaskFilters filter={filter} />
+			</div>
+		</>
+	);
 };
 
 const getTaskFromFormData = (formData: FormData): Task => {
