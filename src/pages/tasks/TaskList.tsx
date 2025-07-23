@@ -1,5 +1,5 @@
 "use client";
-import { useOptimistic, useTransition } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import { v7 as generateUuid } from "uuid";
 import type { Task } from "../../types";
 import { ClearCompletedTasksButton } from "./ClearCompletedTasksButton";
@@ -19,30 +19,34 @@ export const TaskList = ({
   totalActiveTasks: number;
 }) => {
   const [, startTransitionNewTask] = useTransition();
+  const [error, setError] = useState<Error | null>(null);
 
   const initialOptimisticData = { tasks, totalActiveTasks };
-  const [optimisticData, setOptimisticTask] = useOptimistic<
+  const [optimisticData, setOptimisticTasks] = useOptimistic<
     { tasks: Task[]; totalActiveTasks: number },
-    Task
-  >(initialOptimisticData, (currentOptimisticDataValue, newTask) => {
-    const { tasks, totalActiveTasks } = currentOptimisticDataValue;
+    Task[]
+  >(initialOptimisticData, (currentOptimisticDataValue, newTasks) => {
     return {
-      tasks: [newTask, ...tasks],
-      totalActiveTasks: totalActiveTasks + 1,
+      tasks: newTasks,
+      totalActiveTasks: currentOptimisticDataValue.totalActiveTasks + 1,
     };
   });
 
   const handleAddTask = (formData: FormData) => {
     startTransitionNewTask(async () => {
+        setError(null);
       // We might want to use zod or something here to validate the new task
-      setOptimisticTask(getTaskFromFormData(formData));
-      await addTask(formData);
+      setOptimisticTasks([...tasks, getTaskFromFormData(formData)]);
+      await addTask(formData).catch((error) => {
+        setError(error);
+        setOptimisticTasks(tasks);
+      });
     });
   };
 
   return (
     <>
-      <NewTask onAddTask={handleAddTask} />
+      <NewTask onAddTask={handleAddTask} error={error} />
 
       {optimisticData.tasks.length === 0 ? (
         <div className="alert">

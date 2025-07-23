@@ -30,7 +30,7 @@ export const getTasks = async (filter?: string) => {
 
 export const addTask = async (formData: FormData) => {
 	const description = formData.get("description");
-	if (!description || typeof description !== "string") {
+	if (!description || typeof description !== "string" || description === "invalid") {
 		throw new Error("Invalid task description");
 	}
 

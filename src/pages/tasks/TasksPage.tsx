@@ -12,11 +12,11 @@ export async function TasksPage({
 
   return (
     <Layout>
-      <TaskList
-        filter={filter}
-        tasks={tasks}
-        totalActiveTasks={totalActiveTasks}
-      />
+        <TaskList
+          filter={filter}
+          tasks={tasks}
+          totalActiveTasks={totalActiveTasks}
+        />
     </Layout>
   );
 }
