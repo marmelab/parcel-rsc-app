@@ -35,12 +35,12 @@ export const TaskItem = ({
       className="group list-row data-loading:skeleton data-error:bg-error data-error:text-error-content"
     >
       <form
-        action={(event) =>
+        action={(event) => {
+          setError(null);
+          setOptimisticTask({
+            completed_at: task.completed_at ? null : new Date().toISOString(),
+          });
           startTransition(async () => {
-            setError(null);
-            setOptimisticTask({
-              completed_at: task.completed_at ? null : new Date().toISOString(),
-            });
             await (task.completed_at
               ? undoTask(event)
               : completeTask(event)
@@ -48,8 +48,8 @@ export const TaskItem = ({
               setError(error);
               setOptimisticTask(task); // Rollback to original task on error
             });
-          })
-        }
+          });
+        }}
       >
         <input type="hidden" name="id" value={task.id} />
         <div
@@ -80,18 +80,19 @@ export const TaskItem = ({
       >
         {isEditing ? (
           <form
-            action={(event) =>
+            action={(event) => {
+              setError(null);
+              setIsEditing(false);
+
+              const description = event.get("description");
+              setOptimisticTask({ description: description?.toString() });
               startTransition(async () => {
-                setError(null);
-                const description = event.get("description");
-                setOptimisticTask({ description: description?.toString() });
                 await updateTask(event).catch((error) => {
                   setError(error);
                   setOptimisticTask(task); // Rollback to original task on error
                 });
-                setIsEditing(false);
-              })
-            }
+              });
+            }}
           >
             <input type="hidden" name="id" value={task.id} />
             <input

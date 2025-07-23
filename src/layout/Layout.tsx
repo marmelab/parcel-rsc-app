@@ -8,7 +8,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     <html
       lang="en"
       className="min-h-screen flex flex-col scrollbar-stable scrollbar-both-edges"
-      data-theme="dim"
     >
       <head>
         <title>Parcel React Server App</title>
