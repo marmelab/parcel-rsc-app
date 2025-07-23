@@ -58,7 +58,7 @@ export const TaskList = ({
       payload: {
         id: generateUuid(), // Temporary ID, should be replaced by the server
         description: formData.get("description")?.toString() || "",
-        completed_at: formData.get("completed_at")?.toString() || null,
+        completed_at: null,
         created_at: now.toISOString(),
         updated_at: now.toISOString(),
       },

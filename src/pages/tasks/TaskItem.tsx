@@ -32,7 +32,7 @@ export const TaskItem = ({
           onChange(
             {
               ...task,
-              completed_at,
+              completed_at: completed_at || null,
             },
             formData
           );
@@ -45,8 +45,7 @@ export const TaskItem = ({
         >
           <button
             type="submit"
-            className="btn btn-square btn-ghost text-white hover:text-primary group-data-loading:text-accent"
-            disabled={isOptimistic}
+            className="btn btn-square btn-ghost hover:text-primary group-data-loading:text-accent"
           >
             <span className="sr-only">
               {task.completed_at ? "Undo" : "Complete"}
@@ -84,7 +83,7 @@ export const TaskItem = ({
               defaultValue={task.description}
               onBlur={() => setIsEditing(false)}
             />
-            <button type="submit" className="hidden" disabled={isOptimistic}>
+            <button type="submit" className="hidden">
               Save
             </button>
           </form>

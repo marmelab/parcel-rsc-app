@@ -124,7 +124,7 @@ export const updateTask = async (formData: FormData) => {
   if (completed_at != null) {
     const { error } = await db
       .from("tasks")
-      .update({ completed_at: completed_at.toString() })
+      .update({ completed_at: completed_at ? completed_at.toString() : null })
       .eq("id", id);
 
     if (error) {
