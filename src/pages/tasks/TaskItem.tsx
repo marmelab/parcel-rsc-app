@@ -1,5 +1,11 @@
 "use client";
-import { useEffect, useOptimistic, useState, useTransition } from "react";
+import {
+  useEffect,
+  useOptimistic,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import type { Task } from "../../types";
 import { CircleCheckIcon, CircleIcon } from "./icons";
 import { completeTask, undoTask, updateTask } from "./tasks";
@@ -20,6 +26,7 @@ export const TaskItem = ({
   >(task, (state, newTask) => {
     return { ...state, ...newTask };
   });
+  const inputRef = useRef<HTMLInputElement>(null);
   useHandleEscapeKey({ enabled: isEditing, handle: () => setIsEditing(false) });
   return (
     <li
@@ -66,6 +73,9 @@ export const TaskItem = ({
         onDoubleClick={() => {
           setError(null);
           setIsEditing(true);
+          setTimeout(() => {
+            inputRef.current?.select(); // Select the input text on edit
+          });
         }}
       >
         {isEditing ? (
@@ -85,6 +95,7 @@ export const TaskItem = ({
           >
             <input type="hidden" name="id" value={task.id} />
             <input
+              ref={inputRef}
               name="description"
               type="text"
               className="input input-bordered w-full"
@@ -121,6 +132,9 @@ export const TaskItem = ({
         onClick={() => {
           setError(null);
           setIsEditing(true);
+          setTimeout(() => {
+            inputRef.current?.select(); // Select the input text on edit
+          });
         }}
       >
         Edit
