@@ -89,7 +89,7 @@ const getTaskFromFormData = (formData: FormData): Task => {
     description: formData.get("description")?.toString() || "",
     completed_at: null,
     created_at: now.toISOString(),
-    update_at: now.toISOString(),
+    updated_at: now.toISOString(),
   };
 
   return newTask;

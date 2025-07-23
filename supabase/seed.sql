@@ -1,0 +1,1 @@
+insert into tasks (description) values ('Sample Task 1'), ('Sample Task 2'), ('Sample Task 3');

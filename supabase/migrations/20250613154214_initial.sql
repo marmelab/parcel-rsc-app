@@ -1,6 +1,6 @@
 create table "public"."tasks" (
     "created_at" timestamp with time zone not null default now(),
-    "update_at" timestamp with time zone,
+    "updated_at" timestamp with time zone,
     "completed_at" timestamp with time zone,
     "description" text not null,
     "id" uuid not null default gen_random_uuid()
