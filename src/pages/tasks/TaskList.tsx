@@ -87,7 +87,7 @@ export const TaskList = ({
   return (
     <>
       {error && (
-        <div className="alert alert-error mt-2" role="alert">
+        <div className="alert alert-error" role="alert">
           <div>
             <span>{error.message}</span>
           </div>
