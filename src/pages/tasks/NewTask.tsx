@@ -30,7 +30,7 @@ export const NewTask = ({
         </button>
       </div>
 	  {error && (
-		<div className="alert alert-error mt-2">
+		<div className="alert alert-error mt-2" role="alert">
 		  <div>
 			<span>{error.message}</span>
 		  </div>
