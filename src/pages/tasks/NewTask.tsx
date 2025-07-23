@@ -1,10 +1,8 @@
 import { useRef } from "react";
 
 export const NewTask = ({
-  error,
   onAddTask,
 }: {
-  error?: Error | null;
   onAddTask: (data: FormData) => void;
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -29,13 +27,6 @@ export const NewTask = ({
           Add
         </button>
       </div>
-	  {error && (
-		<div className="alert alert-error mt-2" role="alert">
-		  <div>
-			<span>{error.message}</span>
-		  </div>
-		</div>
-	  )}
     </form>
   );
 };

@@ -1,13 +1,13 @@
 "use client";
 import { useOptimistic, useState, useTransition } from "react";
 import { v7 as generateUuid } from "uuid";
-import type { Task } from "../../types";
+import type { Action, Task } from "../../types";
 import { ClearCompletedTasksButton } from "./ClearCompletedTasksButton";
 import { CompleteAllTasksButton } from "./CompleteAllTasksButton";
 import { NewTask } from "./NewTask";
 import { TaskFilters } from "./TaskFilters";
 import { TaskItem } from "./TaskItem";
-import { addTask } from "./tasks";
+import { addTask, updateTask } from "./tasks";
 
 export const TaskList = ({
   filter,
@@ -18,35 +18,82 @@ export const TaskList = ({
   tasks: Task[];
   totalActiveTasks: number;
 }) => {
-  const [, startTransitionNewTask] = useTransition();
+  const [, startTransition] = useTransition();
   const [error, setError] = useState<Error | null>(null);
 
   const initialOptimisticData = { tasks, totalActiveTasks };
   const [optimisticData, setOptimisticTasks] = useOptimistic<
     { tasks: Task[]; totalActiveTasks: number },
-    Task[]
-  >(initialOptimisticData, (currentOptimisticDataValue, newTasks) => {
-    return {
-      tasks: newTasks,
-      totalActiveTasks: currentOptimisticDataValue.totalActiveTasks + 1,
-    };
+    Action
+  >(initialOptimisticData, (currentOptimisticDataValue, action) => {
+    if (action.type === "add") {
+      return {
+        tasks: [
+          { ...action.payload, isOptimistic: true },
+          ...currentOptimisticDataValue.tasks,
+        ],
+        totalActiveTasks: currentOptimisticDataValue.totalActiveTasks + 1,
+      };
+    }
+    if (action.type === "update") {
+      const updatedTasks = currentOptimisticDataValue.tasks.map((task) =>
+        task.id === action.payload.id
+          ? { ...action.payload, isOptimistic: true }
+          : task
+      );
+      return {
+        tasks: updatedTasks,
+        totalActiveTasks: currentOptimisticDataValue.totalActiveTasks,
+      };
+    }
+    return initialOptimisticData;
   });
 
-  const handleAddTask = (formData: FormData) => {
-    startTransitionNewTask(async () => {
-        setError(null);
-      // We might want to use zod or something here to validate the new task
-      setOptimisticTasks([...tasks, getTaskFromFormData(formData)]);
+  const handleAddTask = async (formData: FormData) => {
+    setError(null);
+    const now = new Date();
+
+    setOptimisticTasks({
+      type: "add",
+      payload: {
+        id: generateUuid(), // Temporary ID, should be replaced by the server
+        description: formData.get("description")?.toString() || "",
+        completed_at: formData.get("completed_at")?.toString() || null,
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      },
+    });
+    startTransition(async () => {
       await addTask(formData).catch((error) => {
         setError(error);
-        setOptimisticTasks(tasks);
+        setOptimisticTasks({ type: "rollback" });
+      });
+    });
+  };
+
+  const handleChangeTask = (task: Task, formData: FormData) => {
+    setOptimisticTasks({
+      type: "update",
+      payload: task,
+    });
+    startTransition(async () => {
+      await updateTask(formData).catch((error) => {
+        setError(error);
+        setOptimisticTasks({ type: "rollback" });
       });
     });
   };
 
   return (
     <>
-      <NewTask onAddTask={handleAddTask} error={error} />
+      {error && (
+        <div className="alert alert-error mt-2" role="alert">
+          <div>
+            <span>{error.message}</span>
+          </div>
+        </div>
+      )}
+      <NewTask onAddTask={handleAddTask} />
 
       {optimisticData.tasks.length === 0 ? (
         <div className="alert">
@@ -58,9 +105,10 @@ export const TaskList = ({
         <ul className="list bg-base-300 rounded-box shadow-md">
           {optimisticData.tasks.map((task) => (
             <TaskItem
-              key={task.id}
+              key={`${task.id}-${task.isOptimistic ? "optimistic" : "server"}`}
               task={task}
-              isOptimistic={!tasks.some((t) => t.id === task.id)}
+              isOptimistic={!!task.isOptimistic}
+              onChange={handleChangeTask}
             />
           ))}
         </ul>
@@ -80,17 +128,4 @@ export const TaskList = ({
       </div>
     </>
   );
-};
-
-const getTaskFromFormData = (formData: FormData): Task => {
-  const now = new Date();
-  const newTask: Task = {
-    id: generateUuid(), // Temporary ID, should be replaced by the server
-    description: formData.get("description")?.toString() || "",
-    completed_at: null,
-    created_at: now.toISOString(),
-    updated_at: now.toISOString(),
-  };
-
-  return newTask;
 };
