@@ -106,16 +106,29 @@ export const updateTask = async (formData: FormData) => {
   }
 
   const description = formData.get("description");
-  if (
-    !description ||
-    typeof description !== "string" ||
-    description === "invalid"
-  ) {
+  if (description === "invalid") {
     throw new Error("Invalid task description");
   }
-  const { error } = await db.from("tasks").update({ description }).eq("id", id);
+  if (description != null) {
+    const { error } = await db
+      .from("tasks")
+      .update({ description: description.toString() })
+      .eq("id", id);
 
-  if (error) {
-    throw new Error(`Error updating task: ${error.message}`);
+    if (error) {
+      throw new Error(`Error updating task: ${error.message}`);
+    }
+  }
+
+  const completed_at = formData.get("completed_at");
+  if (completed_at != null) {
+    const { error } = await db
+      .from("tasks")
+      .update({ completed_at: completed_at ? completed_at.toString() : null })
+      .eq("id", id);
+
+    if (error) {
+      throw new Error(`Error updating task: ${error.message}`);
+    }
   }
 };
